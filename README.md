@@ -1,7 +1,7 @@
 <img width="400" src="https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Password.jpg" alt="Password Image"/>
 
 # Threat Hunt Report: Credential Dumping
-- [Scenario Creation](https://github.com/K-ING-TECH/Threat-Hunt_TOR-Browser/blob/main/Threat-Hunting-Scenario_TOR-Event-Creation.md)
+- [Scenario Creation](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Scenario-Creation.md)
 
   
 
