@@ -1,4 +1,4 @@
-<img width="400" src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.splunk.com%2Fen_us%2Fblog%2Fsecurity%2Fmount-an-effective-defense-against-credential-dumping.html&psig=AOvVaw3UM4E_HFdBb6fkkUkx87lG&ust=1740768531385000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMC3h6nC5IsDFQAAAAAdAAAAABAQ" alt="Password Image"/>
+<img width="400" src="https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Password.jpg" alt="Password Image"/>
 
 # Threat Hunt Report: Credential Dumping
 - [Scenario Creation](https://github.com/K-ING-TECH/Threat-Hunt_TOR-Browser/blob/main/Threat-Hunting-Scenario_TOR-Event-Creation.md)
@@ -15,6 +15,8 @@
 ## Scenario
 
 Microsoft Sentinel generated an alert indicating potential credential dumping via a password recovery tool. The impacted device is king-vm, with user king apparently downloading and executing WebBrowserPassView.exe. This tool extracted stored web browser credentials and saved them into Passwords.txt. Further investigation focused on whether these credentials were exfiltrated or otherwise misused.
+
+![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff-Incident-Alert.png)
 
 ### High-Level Credential Dumping IoC Discovery Plan
 - **Check DeviceFileEvents** for any common credential file names such as Passwords.txt, Logins.txt, or Dumped_Credentials.txt.
@@ -36,6 +38,8 @@ DeviceFileEvents
 | where tolower(FileName) in (tolower("dumped_credentials.txt"), tolower("passwords.txt"), tolower("logins.txt"))
 | project TimeGenerated, DeviceName, InitiatingProcessAccountName, FileName, FolderPath
 ```
+
+![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff1.png)
 
 #### Findings:
 
@@ -59,6 +63,8 @@ DeviceFileEvents
 | project TimeGenerated, DeviceName, InitiatingProcessAccountName, FileName, FolderPath
 ```
 
+![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff2.png)
+
 #### Findings:
 
 - Identified Application: WebBrowserPassView.exe
@@ -78,6 +84,8 @@ DeviceNetworkEvents
 | where TimeGenerated between (todatetime('2025-02-27T17:22:44.3507344Z') - 10m .. todatetime('2025-02-27T17:22:44.3507344Z') + 5m)
 | project TimeGenerated, ActionType, RemoteIP, RemoteUrl, InitiatingProcessParentFileName
 ```
+
+![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff3.png)
 
 #### Findings:
 
@@ -100,6 +108,8 @@ DeviceNetworkEvents
 | where InitiatingProcessFileName has_any ("powershell.exe", "cmd.exe", "explorer.exe", "curl.exe", "python.exe", "wget.exe")
 | where Protocol in ("HTTPS", "HTTP")
 ```
+
+![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff4.png)
 
 #### Findings:
 
@@ -140,6 +150,8 @@ Event: No network events indicate data transfer to external file-sharing platfor
 - Ran a full antivirus scan to detect any residual threats or malicious executables.
 - Collected an Investigation Package for forensic analysis, ensuring logs and artifacts are preserved.
 
+  ![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff-Triage.png)
+
 ---
 ## Lessons Learned & Future Recommendations:
 
@@ -162,4 +174,4 @@ Event: No network events indicate data transfer to external file-sharing platfor
 
 ---
 ## Summary
-User king downloaded and executed WebBrowserPassView.exe on king-vm, successfully dumping locally stored browser credentials into Passwords.txt. Microsoft Defender for Endpoint alerts and Microsoft Sentinel correlation rules triggered an investigation, resulting in VM isolation and a comprehensive threat analysis. No external exfiltration was identified, though potential offline exfiltration (e.g., via USB) remains a concern. Future prevention measures include stricter controls on downloading and executing password recovery utilities, enhanced SmartScreen enforcement, and more robust credential file monitoring within Microsoft Sentinel.
+User **king** downloaded and executed **WebBrowserPassView.exe** on **king-vm**, successfully dumping locally stored browser credentials into **Passwords.txt**. Microsoft Defender for Endpoint alerts and Microsoft Sentinel correlation rules triggered an investigation, resulting in VM isolation and a comprehensive threat analysis. No external exfiltration was identified, though potential offline exfiltration (e.g., via USB) remains a concern. Future prevention measures include stricter controls on downloading and executing password recovery utilities, enhanced SmartScreen enforcement, and more robust credential file monitoring within Microsoft Sentinel.
