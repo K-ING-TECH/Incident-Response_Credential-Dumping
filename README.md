@@ -1,4 +1,5 @@
-<img width="400" src="https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Password.jpg" alt="Password Image"/>
+<img src="images/Password.jpg" alt="Password Image" width="400"/>
+
 
 # Threat Hunt Report: Credential Dumping
 - [Scenario Creation](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Scenario-Creation.md)
@@ -16,7 +17,7 @@
 
 Microsoft Sentinel generated an alert indicating potential credential dumping via a password recovery tool. The impacted device is king-vm, with user king apparently downloading and executing WebBrowserPassView.exe. This tool extracted stored web browser credentials and saved them into Passwords.txt. Further investigation focused on whether these credentials were exfiltrated or otherwise misused.
 
-![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff-Incident-Alert.png)
+![Credential Stuff - Incident Alert](images/Cred-Stuff-Incident-Alert.png)
 
 ### High-Level Credential Dumping IoC Discovery Plan
 - **Check DeviceFileEvents** for any common credential file names such as Passwords.txt, Logins.txt, or Dumped_Credentials.txt.
@@ -39,7 +40,7 @@ DeviceFileEvents
 | project TimeGenerated, DeviceName, InitiatingProcessAccountName, FileName, FolderPath
 ```
 
-![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff1.png)
+![Credential Stuff 1](images/Cred-Stuff1.png)
 
 #### Findings:
 
@@ -63,7 +64,7 @@ DeviceFileEvents
 | project TimeGenerated, DeviceName, InitiatingProcessAccountName, FileName, FolderPath
 ```
 
-![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff2.png)
+![Credential Stuff 2](images/Cred-Stuff2.png)
 
 #### Findings:
 
@@ -85,7 +86,7 @@ DeviceNetworkEvents
 | project TimeGenerated, ActionType, RemoteIP, RemoteUrl, InitiatingProcessParentFileName
 ```
 
-![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff3.png)
+![Credential Stuff 3](images/Cred-Stuff3.png)
 
 #### Findings:
 
@@ -109,7 +110,7 @@ DeviceNetworkEvents
 | where Protocol in ("HTTPS", "HTTP")
 ```
 
-![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff4.png)
+![Credential Stuff 4](images/Cred-Stuff4.png)
 
 #### Findings:
 
@@ -150,7 +151,7 @@ Event: No network events indicate data transfer to external file-sharing platfor
 - Ran a full antivirus scan to detect any residual threats or malicious executables.
 - Collected an Investigation Package for forensic analysis, ensuring logs and artifacts are preserved.
 
-  ![alt text](https://github.com/K-ING-TECH/Incident-Response_Credential-Dumping/blob/main/Cred-Stuff-Triage.png)
+![Credential Stuff - Triage](images/Cred-Stuff-Triage.png)
 
 ---
 ## Lessons Learned & Future Recommendations:
